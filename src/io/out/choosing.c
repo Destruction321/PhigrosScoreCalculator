@@ -19,6 +19,7 @@
 #include "data_setting.h"
 #include "file.h"
 
+static const int DIVIDING_NUM = 10; ///< 控制机输出方案时，用分割线分组的数量
 
 bool choose(Song* song) {
     size_t idx = print_solutions(0);
@@ -75,7 +76,7 @@ size_t print_result(int choice, size_t idx) {
         do {
             data = (s_list*)array->data;
             idx = print_solutions(idx);
-        } while ((idx % TEN != 0) && (idx < array->num));
+        } while ((idx % 10 != 0) && (idx < array->num));
         break;
 
     default:
@@ -88,7 +89,7 @@ size_t print_result(int choice, size_t idx) {
 size_t print_solutions(size_t idx) {
     s_list* data = get_data(array, idx);
 
-    if ((idx % TEN == 1) && (idx != 1)) {
+    if ((idx % DIVIDING_NUM == 1) && (idx != 1)) {
         print_dividing_line('-', MEDIUM, stdout);
     }
 
@@ -109,7 +110,7 @@ bool choose_solution(size_t counter, Song* song) {
 
     ///< 选择方案
     int choice = INITIALISE_CHOICE;
-    if (!set_data(&choice, init_input(1, counter, "目标方案"), song)) {
+    if (!set_data(&choice, init_input(1, counter, SOLUTION), song)) {
         return false;
     }
 

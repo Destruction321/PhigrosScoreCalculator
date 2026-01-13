@@ -22,11 +22,11 @@
 
 
 bool set_note_and_goal(Song* song) {
-    if (!set_data(&song->note, init_input(MIN_NOTE, MAX_NOTE, " note 总数"), song)) {
+    if (!set_data(&song->note, init_input(MIN_NOTE, MAX_NOTE, NOTE), song)) {
         return false;
     }
 
-    if (!set_data(&song->goal, init_input(MIN_SCORE, MAX_SCORE, "目标分数"), song)) {
+    if (!set_data(&song->goal, init_input(MIN_SCORE, MAX_SCORE, GOAL), song)) {
         return false;
     }
 
@@ -63,11 +63,12 @@ bool set_data(int* data, Input input, Song* song) {
 }
 
 Input init_input(int min, int max, const char* name) {
-    static const int NAME_LENGTH = 12; ///< 四个汉字，4 * 3 = 12
+    static const int NAME_LENGTH = 16; ///< 四个汉字，4 * 4 = 12（以UTF-8编码最长为界限）
     const size_t length = strnlen(name, NAME_LENGTH);
+
     return (Input) {
         min, max, name,
-        strncmp(name, "目标方案", length), strncmp(name, "目标分数", length)
+        strncmp(name, SOLUTION, length), strncmp(name, GOAL, length)
     };
 }
 

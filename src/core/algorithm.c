@@ -21,6 +21,18 @@
 static const double ACCURACY_SCORE = 900000.0; ///< 判定分
 static double factor = 0; ///< 公式系数（5000 / note）
 
+typedef struct auxiliary_arguments {
+    double perfect_score; ///< 单个 perfect 的分值
+    double good_score;    ///< 单个 good 的分值
+    double delta_score;   ///< perfect_score - good_score
+} Args;
+
+typedef struct loop {
+    int loop_perfect;
+    int loop_good;
+    int loop_max_combo;
+} Loop;
+
 
 bool seek_solution(Song* song) {
     ///< 特殊分数枚举
@@ -29,17 +41,21 @@ bool seek_solution(Song* song) {
         ALL_GOOD = 685000,
         ALL_BAD_AND_MISS = 0,
     };
+
     table_header(song);
     switch (song->goal) {
     case ALL_BAD_AND_MISS:
         fputs("放置即可。", stdout);
         break;
+
     case ALL_PERFECT:
         fputs("获得 AP 即可。", stdout);
         break;
+
     case ALL_GOOD:
         fputs("全部 good 即可。", stdout);
         break;
+
     default:
         return algorithm(song); ///< 不是特殊分数，进入计算流程
     }
@@ -217,6 +233,7 @@ void get_other_solutions(int note, Loop loop) {
             loop.loop_good += MAX_COMBO_FACTOR;
             loop.loop_max_combo -= GOOD_FACTOR;
         }
+        
         if (is_valid(loop, note)) {
             input_data(array, &loop);
         }
@@ -229,12 +246,16 @@ int update_data(Loop* loop, int last_good) {
         loop->loop_max_combo += (
             BASIC_ADDED + GOOD_FACTOR * (loop->loop_good - last_good) / MAX_COMBO_FACTOR
         );
+
         if (loop->loop_max_combo > loop->loop_perfect + loop->loop_good) {
             last_good += MAX_COMBO_FACTOR;
             loop->loop_max_combo -= GOOD_FACTOR;
         }
+
         loop->loop_good = last_good;
+
     } while (loop->loop_max_combo <= 0);
+
     return last_good;
 }
 
@@ -242,6 +263,7 @@ bool is_valid(Loop loop, int note) {
     int perfect_and_good = loop.loop_perfect + loop.loop_good;
     int bad_and_miss = (perfect_and_good - 1) / loop.loop_max_combo;
     int min_note = perfect_and_good + bad_and_miss;
+
     return (
         (loop.loop_max_combo <= perfect_and_good)
         && (min_note <= note)

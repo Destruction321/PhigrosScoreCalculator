@@ -1,12 +1,13 @@
 /**
  * @file dynamic_array.h
- * @author 棍母
+ * 
  * @brief 通用动态数组定义文件，可在其他地方复用
+ * 
+ * @author 棍母
  * @version 1.91.9810
  * @date 2026-01-13
  * 
  * @copyright Copyright (c) 2026
- * 
  */
 #include "dynamic_array.h"
 

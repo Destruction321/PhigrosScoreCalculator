@@ -18,6 +18,17 @@
 #include <stdarg.h>
 
 /**
+ * @brief 分割线长度
+ */
+enum dividing_line_length {
+    LONG = 71,     ///< 无效的目标分数，请输入一个 1 到 1000000 之间的整数，按"Enter"结束输入：
+    MEDIUM = 47,   ///< 按"Enter"开始新一轮查找，输入其他任意字符退出：
+    SHORT = 39,    ///< 按"Enter"以开始，输入其他任意字符退出：
+    ASTERISK = 33, ///< *********************************
+};
+
+
+/**
  * @brief 清屏并打印信息。
  *
  * @param[in] format 信息格式字符串。

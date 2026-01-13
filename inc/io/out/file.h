@@ -24,16 +24,26 @@
     #define R_OK 4
     #define R_W_OK 6
 
-    enum path_separator { PATH_SEPARATOR = '\\', };
+    #define PATH_SEPARATOR '\\'
 #else
     #include <unistd.h>
     #include <sys/stat.h>
     #include <sys/types.h>
-    enum path_separator { PATH_SEPARATOR = '/', };
+    #define PATH_SEPARATOR = '/'
 #endif
 
 typedef struct song Song;
 typedef enum status Status;
+
+/**
+ * @brief 文件路径长度限制
+ */
+enum file {
+    FILE_LENGTH = 200,          ///< 文件路径最大长度
+    SUBFOLDER_NAME_LENGTH = 27, ///< 子文件夹路径最大长度
+    FOLDER_NAME_LAST = 25,      ///< SUBFOLDER_NAME_LENGTH - 2, 最后一个有效字符位的后一位
+};
+
 
 /**
  * @brief 创建文件夹。

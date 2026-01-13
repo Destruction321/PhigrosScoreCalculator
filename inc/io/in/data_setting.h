@@ -12,6 +12,11 @@
 #ifndef DATASETTING_H
 #define DATASETTING_H
 
+#define NOTE " note 总数"
+#define GOAL  "目标分数"
+#define SOLUTION  "目标方案"
+
+
 typedef struct song Song;
 typedef struct input_check Input;
 typedef enum status Status;

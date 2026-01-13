@@ -14,10 +14,22 @@
 
 #include <stdbool.h>
 
+/**
+ * @brief 公式参数
+ * 
+ * 参数来源见README.md
+ */
+enum formula_factor {
+    PERFECT_FACTOR = 180,
+    GOOD_FACTOR = 117,
+    MAX_COMBO_FACTOR = 20,
+    BASIC_ADDED = 9,
+};
+
 typedef struct song Song;
-typedef struct auxiliary_arguments Args;
-typedef struct list_node list_node;
-typedef struct loop Loop;
+typedef struct auxiliary_arguments Args; ///< 算法辅助参数结构
+typedef struct loop Loop; ///< 循环参数结构
+
 
 /**
  * @brief 寻找方案

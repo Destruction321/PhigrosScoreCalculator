@@ -3,7 +3,7 @@
  * 
  * @brief 公共头文件
  * 
- * 提供了一些公共的宏定义和数据结构
+ * 提供了一些公共的常量定义和数据结构
  * 
  * @author 棍母
  * @version 11.45.14
@@ -30,66 +30,6 @@ enum scope {
     TO_FILE = 0,      ///< 选择方案时，输入 0 直接写入文件
 };
 
-/**
- * @brief 公式参数
- * 
- * 参数来源见README.md
- */
-enum formula_factor {
-    PERFECT_FACTOR = 180,
-    GOOD_FACTOR = 117,
-    MAX_COMBO_FACTOR = 20,
-    BASIC_ADDED = 9,
-};
-
-/**
- * @brief clear 函数不同情况下删除的行数
- */
-enum clear_lines {
-    //! ===============================================
-    //! 你是否要退出？/确认要退出吗？
-    //! =======================================
-    //! 按"Enter"以退出，输入其他任意字符继续：
-    NOT_EXIT = 4,
-
-    //! 请输入歌曲目标方案（1 到 n 之间的整数）：
-    EXIT = 1,
-
-    //! ===============================================
-    //! 请输入歌曲目标方案（1 到 n 之间的整数）：
-    ERROR_CHOICE = 2,
-};
-
-/**
- * @brief 输出方案时的各种选择
- */
-enum choice {
-    INITIALISE_CHOICE = 0,
-    WRITE_FILE = 48,          ///< '0'
-    CHOOSE_SOLUTION = 49,     ///< '1'
-    PRINT_ALL_SOLUTIONS = 50, ///< '2'
-    PRINT_TEN_SOLUTIONS = 51, ///< '3'
-    TEN = 10,
-};
-
-/**
- * @brief 分割线长度
- */
-enum dividing_line_length {
-    LONG = 71,     ///< 无效的目标分数，请输入一个 1 到 1000000 之间的整数，按"Enter"结束输入：
-    MEDIUM = 47,   ///< 按"Enter"开始新一轮查找，输入其他任意字符退出：
-    SHORT = 39,    ///< 按"Enter"以开始，输入其他任意字符退出：
-    ASTERISK = 33, ///< *********************************
-};
-
-/**
- * @brief 文件路径长度限制
- */
-enum file {
-    FILE_LENGTH = 200,          ///< 文件路径最大长度
-    SUBFOLDER_NAME_LENGTH = 27, ///< 子文件夹路径最大长度
-    FOLDER_NAME_LAST = 25,      ///< SUBFOLDER_NAME_LENGTH - 2, 最后一个有效字符位的后一位
-};
 
 /**
  * @brief 状态码
@@ -127,23 +67,5 @@ typedef struct input_check {
     int compare_name_with_solution;
     int compare_name_with_goal;
 } Input;
-
-/**
- * @brief 算法辅助参数结构
- */
-typedef struct auxiliary_arguments {
-    double perfect_score; ///< 单个 perfect 的分值
-    double good_score;    ///< 单个 good 的分值
-    double delta_score;   ///< perfect_score - good_score
-} Args;
-
-/**
- * @brief 循环参数结构
- */
-typedef struct loop {
-    int loop_perfect;
-    int loop_good;
-    int loop_max_combo;
-} Loop;
 
 #endif ///< STRUCT_H

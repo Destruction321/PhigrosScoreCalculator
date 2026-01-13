@@ -1,12 +1,13 @@
 /**
  * @file dynamic_array.h
+ * 
+ * @brief 通用动态数组定义文件，可在其他地方复用
+ * 
  * @author 棍母
- * @brief 通用动态数组头文件，可在其他地方复用
  * @version 1.91.9810
  * @date 2026-01-13
  * 
  * @copyright Copyright (c) 2026
- * 
  */
 #ifndef DYNAMIC_ARRAY_H
 #define DYNAMIC_ARRAY_H

@@ -14,8 +14,19 @@
 
 #include <stdlib.h>
 
+/**
+ * @brief 输出方案时的各种选择
+ */
+enum choice {
+    INITIALISE_CHOICE = 0,
+    WRITE_FILE = 48,          ///< '0'
+    CHOOSE_SOLUTION = 49,     ///< '1'
+    PRINT_ALL_SOLUTIONS = 50, ///< '2'
+    PRINT_TEN_SOLUTIONS = 51, ///< '3'
+};
+
+
 typedef struct song Song;
-typedef struct list_node list_node;
 
 /**
  * @brief 选择输出方式
