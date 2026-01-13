@@ -63,7 +63,7 @@ bool set_data(int* data, Input input, Song* song) {
 }
 
 Input init_input(int min, int max, const char* name) {
-    enum { NAME_LENGTH = 12 }; ///< 四个汉字，4 * 3 = 12
+    static const int NAME_LENGTH = 12; ///< 四个汉字，4 * 3 = 12
     const size_t length = strnlen(name, NAME_LENGTH);
     return (Input) {
         min, max, name,
@@ -82,10 +82,9 @@ int get_min(Input input) {
 }
 
 Status scanf_int(int* data, int min, int max) {
-    enum {
-        INT_SIZE = 8,
-        LAST = 6, ///< INT_SIZE - 2, 最后一个有效整数位
-    };
+    static const int INT_SIZE = 8;
+    static const int LAST = 6; ///< INT_SIZE - 2, 最后一个有效整数位
+
     char str[INT_SIZE] = { '\0' };
 
     ///< 检查输入情况

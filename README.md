@@ -105,7 +105,7 @@
     $$
     \begin{cases}
         note \in [1,\ 5000]\\
-        goal \in \{0\} \cup [good\_score, \ 1000000 - perfect\_score - good\_score] \cup 1000000\\
+        goal \in \{0\} \cup [good\_score, \ 1000000 - (perfect\_score - good\_score)] \cup \{1000000\}\\
         perfect \in [0, \ min\{note, \frac{goal}{perfect\_score}\}]\\
         \begin{cases}
             max\_combo \ge 1\\
@@ -148,20 +148,9 @@
 
             ```c
             typedef struct auxiliary_arguments {
-                ///< 辅助参数
-                double perfect_score;   ///< 单个 perfect 的分值
-                double good_score;      ///< 单个 good 的分值
-                double delta_score;     ///< perfect_score - good_score
-                double factor;          ///< 计算公式最大公约数（5000 / note）
-                size_t counter;         ///< 记录方案数量
-
-                ///< 循环变量
-                int loop_perfect;       ///< 循环 perfect
-                int loop_good;          ///< 循环 good
-                int loop_max_combo;     ///< 循环 max_combo
-
-                ///< 当前方案对应总分
-                int score;
+                double perfect_score; ///< 单个 perfect 的分值
+                double good_score;    ///< 单个 good 的分值
+                double delta_score;   ///< perfect_score - good_score
             } Args;
             ```
 
@@ -236,7 +225,7 @@
 
         2. 第一层循环：寻找 $perfect$。
 
-            - 若当前 $perfect$ 值对应的最大分数（即除 $perfect$ 以外都是 $good$，对应代码中的 $args \to score$）已经小于 $goal$，说明往后所有方案组合都不可能达到 $goal$，没有必要再找下去，标志着第一个方案已经找完。
+            - 若当前 $perfect$ 值对应的最大分数（即除 $perfect$ 以外都是 $good$）已经小于 $goal$，说明往后所有方案组合都不可能达到 $goal$，没有必要再找下去，标志着第一个方案已经找完。
 
             若：
 

@@ -19,9 +19,7 @@
 #include "choosing.h"
 
 static const double ACCURACY_SCORE = 900000.0; ///< 判定分
-static const double COMMON_FACTOR = 5000.0;
-
-double factor = 0; ///< 公式系数（5000 / note）
+static double factor = 0; ///< 公式系数（5000 / note）
 
 
 bool seek_solution(Song* song) {
@@ -61,15 +59,15 @@ bool algorithm(Song* song) {
 
 void init_args(Song* song, Args* args) {
     static const double GOOD_RATIO = 0.65;
-    static const int ACCURACY_FACTOR = 1000;
+    static const int SCALE_FACTOR = 1000;
 
     ///< 取到更多小数位，增加精度
-    args->perfect_score = ACCURACY_FACTOR * ACCURACY_SCORE / (song->note);
+    args->perfect_score = SCALE_FACTOR * ACCURACY_SCORE / (song->note);
     args->good_score = args->perfect_score * GOOD_RATIO;
 
     ///< 还原精度
-    args->perfect_score /= ACCURACY_FACTOR;
-    args->good_score /= ACCURACY_FACTOR;
+    args->perfect_score /= SCALE_FACTOR;
+    args->good_score /= SCALE_FACTOR;
 
     ///< 校验
     args->delta_score = args->perfect_score - args->good_score;
@@ -83,9 +81,10 @@ void init_args(Song* song, Args* args) {
 }
 
 bool get_solutions(Song* song, Args args) {
-    const int SIZE = 1000; ///< 动态数组初始大小
+    static const int SIZE = 1000; ///< 动态数组初始大小
     array = INITIALIZE_ARRAY(SIZE, s_list);
     fputs("计算中……\n", stdout);
+
     Loop loop = { 0 };
     if (get_first_solution(song, args, &loop)) {
         get_other_solutions(song->note, loop);
@@ -94,6 +93,7 @@ bool get_solutions(Song* song, Args args) {
         Free(array);
         return code;
     }
+
     clear_and_print(
         "未找到可使 note 总数为 %d 的谱面打出 %d 分的方案。\n",
         song->note, song->goal
@@ -102,12 +102,14 @@ bool get_solutions(Song* song, Args args) {
 }
 
 bool get_first_solution(Song* song, Args args, Loop* loop) {
-    factor = COMMON_FACTOR / song->note;
+    factor = 5000.0 / song->note;
+
     loop->loop_perfect = (
         (song->goal > ACCURACY_SCORE)
         ? (song->note - 1)
         : (int)(song->goal / args.perfect_score)
     );
+    
     return get_first_perfect(song, args, loop);
 }
 
@@ -133,7 +135,7 @@ bool get_first_perfect(Song* song, Args args, Loop* loop) {
         if (get_first_good(song, loop)) {
             return true;
         }
-    } while ((--(loop->loop_perfect)) >= 0);
+    } while (--(loop->loop_perfect) >= 0);
     return false;
 }
 
@@ -165,7 +167,7 @@ bool get_first_good(Song* song, Loop* loop) {
             return true;
         }
 
-    } while ((++(loop->loop_good)) <= song->note - loop->loop_perfect);
+    } while (++(loop->loop_good) <= song->note - loop->loop_perfect);
 
     return false;
 }
@@ -193,7 +195,7 @@ bool get_first_max_combo(Song* song, Loop* loop) {
         input_data(array, loop); ///< 找到第一个方案，加入数组
         return true;
 
-    } while ((--(loop->loop_max_combo)) > 0);
+    } while (--(loop->loop_max_combo) > 0);
 
     return false;
 }
@@ -215,7 +217,7 @@ void get_other_solutions(int note, Loop loop) {
             loop.loop_good += MAX_COMBO_FACTOR;
             loop.loop_max_combo -= GOOD_FACTOR;
         }
-        if (data_is_valid(loop, note)) {
+        if (is_valid(loop, note)) {
             input_data(array, &loop);
         }
     }
@@ -236,7 +238,7 @@ int update_data(Loop* loop, int last_good) {
     return last_good;
 }
 
-bool data_is_valid(Loop loop, int note) {
+bool is_valid(Loop loop, int note) {
     int perfect_and_good = loop.loop_perfect + loop.loop_good;
     int bad_and_miss = (perfect_and_good - 1) / loop.loop_max_combo;
     int min_note = perfect_and_good + bad_and_miss;
