@@ -197,15 +197,15 @@
             ```c
             void init_args(Song* song, Args* args) {
                 static const double GOOD_RATIO = 0.65;
-                static const int ACCURACY_FACTOR = 1000;
+                static const int SCALE_FACTOR = 1000;
 
                 ///< 取到更多小数位，增加精度
-                args->perfect_score = ACCURACY_FACTOR * ACCURACY_SCORE / (song->note);
+                args->perfect_score = SCALE_FACTOR * ACCURACY_SCORE / (song->note);
                 args->good_score = args->perfect_score * GOOD_RATIO;
 
                 ///< 还原精度
-                args->perfect_score /= ACCURACY_FACTOR;
-                args->good_score /= ACCURACY_FACTOR;
+                args->perfect_score /= SCALE_FACTOR;
+                args->good_score /= SCALE_FACTOR;
                 args->delta_score = args->perfect_score - args->good_score;
                 if (MAX_SCORE - song->goal < args->delta_score || song->goal < args->good_score) {
                     clear_and_print(
