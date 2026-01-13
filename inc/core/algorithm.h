@@ -41,7 +41,7 @@ bool algorithm(Song* song);
  * @brief 初始化辅助参数
  * 
  * @param[in] song 歌曲参数
- * @param[in] args 辅助参数
+ * @param[in,out] args 辅助参数
  */
 void init_args(Song* song, Args* args);
 
@@ -100,7 +100,6 @@ bool get_first_max_combo(Song* song, Loop* loop);
 /**
  * @brief 计算分数
  * 
- * @param[in] factor 公式系数（5000 / note）
  * @param[in] perfect
  * @param[in] good
  * @param[in] max_combo
@@ -112,7 +111,6 @@ int calculate_score(int perfect, int good, int max_combo);
  * @brief 寻找其他方案，原理见 README.md
  * 
  * @param[in] note note 总数
- * @param[in,out] counter 方案计数器
  * @param[in,out] loop 循环参数，计算方案数据
  */
 void get_other_solutions(int note, Loop loop);
@@ -134,14 +132,5 @@ int update_data(Loop* loop, int last_good);
  * @return false 数据不合理
  */
 bool data_is_valid(Loop loop, int note);
-
-/**
- * @brief 添加方案
- * 
- * @param[in] tail 指向添加位置的指针
- * @param[in,out] counter 方案计数器
- * @param[in,out] loop 方案数据
- * @return list_node* 新的方案节点
- */
 
 #endif ///< ALGORITHM_H

@@ -40,7 +40,7 @@ typedef enum status Status;
  * 
  * 考虑到solutions文件夹路径长度，自定义文件夹名称限制在25半角字符以内
  * 
- * @param path 文件夹路径
+ * @param[in] path 文件夹路径
  * @return int 状态
  * @retval 0 成功
  * @retval -1 失败

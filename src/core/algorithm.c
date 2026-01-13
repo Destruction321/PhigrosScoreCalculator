@@ -18,7 +18,6 @@
 #include "dynamic_array.h"
 #include "choosing.h"
 
-
 static const double ACCURACY_SCORE = 900000.0; ///< 判定分
 static const double COMMON_FACTOR = 5000.0;
 
