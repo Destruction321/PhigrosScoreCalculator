@@ -83,7 +83,7 @@ void init_args(Song* song, Args* args) {
 }
 
 bool get_solutions(Song* song, Args args) {
-    const int SIZE = 1000; ///< 动态数字初始大小
+    const int SIZE = 1000; ///< 动态数组初始大小
     array = INITIALIZE_ARRAY(SIZE, s_list);
     fputs("计算中……\n", stdout);
     Loop loop = { 0 };

@@ -60,7 +60,6 @@ static void program(Song* song) {
             code = false;
             continue;
         }
-
         break;
     }
 }
