@@ -21,7 +21,7 @@ void clear_and_print(const char* format, ...) {
 }
 
 void print_dividing_line(char line_type, int length, FILE* stream) {
-    static const int MAX_LINE = 150; ///< 分割线长度最大值
+    enum{ MAX_LINE = 150 }; ///< 分割线长度最大值
     char dividing_line[MAX_LINE] = { '\0' };
     if (line_type == '\0') {
         line_type = '?';

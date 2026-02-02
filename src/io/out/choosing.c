@@ -94,7 +94,7 @@ size_t print_solutions(size_t idx) {
     }
 
     printf(
-        "%d. Perfect：%d, Good：%d, Max Combo：%d\n",
+        "%zu. Perfect：%d, Good：%d, Max Combo：%d\n",
         ++idx, data->perfect, data->good, data->max_combo
     );
 

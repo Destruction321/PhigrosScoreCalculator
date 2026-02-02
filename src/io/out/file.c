@@ -44,7 +44,7 @@ void write_file(Song* song) {
     s_list* data = (s_list*)array->data;
     for (size_t i = 1; i <= array->num; ++i) {
         fprintf(
-            fp, "%4d. Perfect：%-4d, Good：%-4d, Max Combo：%-4d",
+            fp, "%4zu. Perfect：%-4d, Good：%-4d, Max Combo：%-4d",
             i, data->perfect, data->good, data->max_combo
         );
         if (i % 2 == 0) { ///< 文件里两个方案一行

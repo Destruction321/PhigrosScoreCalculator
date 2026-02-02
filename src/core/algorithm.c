@@ -9,6 +9,7 @@
  * 
  * @copyright Copyright (c) 2025
  */
+#include <stdbool.h>
 #include <math.h>
 
 #include "algorithm.h"
@@ -234,7 +235,7 @@ void get_other_solutions(int note, Loop loop) {
             loop.loop_max_combo -= GOOD_FACTOR;
         }
         
-        if (is_valid(loop, note)) {
+        if (data_is_valid(loop, note)) {
             input_data(array, &loop);
         }
     }
@@ -259,7 +260,7 @@ int update_data(Loop* loop, int last_good) {
     return last_good;
 }
 
-bool is_valid(Loop loop, int note) {
+bool data_is_valid(Loop loop, int note) {
     int perfect_and_good = loop.loop_perfect + loop.loop_good;
     int bad_and_miss = (perfect_and_good - 1) / loop.loop_max_combo;
     int min_note = perfect_and_good + bad_and_miss;
