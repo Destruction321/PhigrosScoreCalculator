@@ -42,7 +42,7 @@ void write_file(Song* song) {
 
     print_dividing_line('=', LONG + ASTERISK, fp);
 
-    s_list* data = (s_list*)array->data;
+    sol_t* data = (sol_t*)array->data;
     for (size_t i = 1; i <= array->num; ++i) {
         fprintf(
             fp, "%4zu. Perfect：%-4d, Good：%-4d, Max Combo：%-4d",

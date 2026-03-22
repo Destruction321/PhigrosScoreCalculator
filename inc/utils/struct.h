@@ -53,7 +53,7 @@ typedef struct solution {
     int perfect;
     int good;
     int max_combo;
-} s_list;
+} sol_t;
 
 /**
  * @brief 输入检查参数结构

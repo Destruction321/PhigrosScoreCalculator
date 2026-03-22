@@ -138,7 +138,7 @@
                 int perfect;
                 int good;
                 int max_combo;
-            } s_list;
+            } sol_t;
             ```
 
         3. 算法参数结构：

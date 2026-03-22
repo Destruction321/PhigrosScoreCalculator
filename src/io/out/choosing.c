@@ -72,9 +72,9 @@ size_t print_result(int choice, size_t idx) {
         break;
 
     case PRINT_TEN_SOLUTIONS:
-        s_list* data = NULL;
+        sol_t* data = NULL;
         do {
-            data = (s_list*)array->data;
+            data = (sol_t*)array->data;
             idx = print_solutions(idx);
         } while ((idx % 10 != 0) && (idx < array->num));
         break;
@@ -87,7 +87,7 @@ size_t print_result(int choice, size_t idx) {
 }
 
 size_t print_solutions(size_t idx) {
-    s_list* data = get_data(array, idx);
+    sol_t* data = get_data(array, idx);
 
     if ((idx % DIVIDING_NUM == 1) && (idx != 1)) {
         print_dividing_line('-', MEDIUM, stdout);
@@ -121,7 +121,7 @@ bool choose_solution(size_t counter, Song* song) {
     }
 
     ///< 找目标方案
-    s_list* found = get_data(array, --choice);
+    sol_t* found = get_data(array, --choice);
 
     ///< 最终选择呈现
     table_header(song);

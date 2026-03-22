@@ -98,7 +98,7 @@ void init_args(Song* song, Args* args) {
 
 bool get_solutions(Song* song, Args args) {
     static const int SIZE = 1000; ///< 动态数组初始大小
-    array = INITIALIZE_ARRAY(SIZE, s_list);
+    array = INITIALIZE_ARRAY(SIZE, sol_t);
     fputs("计算中……\n", stdout);
 
     Loop loop = { 0 };
