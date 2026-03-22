@@ -85,7 +85,7 @@ int get_min(Input input) {
 Status scanf_int(int* data, int min, int max) {
     enum {
         INT_SIZE = 8,
-        LAST = 6 ///< INT_SIZE - 2, 最后一个有效整数位
+        LAST = INT_SIZE - 2 ///< INT_SIZE - 2, 最后一个有效整数位
     };
     char str[INT_SIZE] = { '\0' };
 
@@ -101,7 +101,7 @@ Status scanf_int(int* data, int min, int max) {
     }
 
     ///< 用户输入了过长的数据
-    if ((str[LAST] != '\n') && (str[LAST] != '\0') && (str[LAST] != '0')) {
+    if ((str[LAST] != '\n') && (str[LAST] != '\0')) {
         clear_buffer();
         return FAILURE;
     }
