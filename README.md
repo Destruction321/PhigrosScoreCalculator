@@ -27,7 +27,6 @@
     2. 判定分：
 
         设歌曲的**总音符数**为 $note$​，则：
-
         1. 单个 $perfect$ 判定分 ($perfect\_score$​) 的计算公式为：
 
             $$
@@ -117,11 +116,9 @@
     注：**所有参数均为整数。**
 
     根据式$(9)$和条件$(10)$，可设计算法如下：
-
     1. 数据结构设计：
 
         设计**输入检查**、**方案组合**、**算法**、**歌曲**五个参数结构，并使用动态数组存储方案。其中歌曲参数包括用户输入的 $note$、$goal$；算法参数包含了计算过程中用到的各个辅助参数；方案组合参数负责存储满足式$(9)$与条件$(10)$的参数组合；输入检查参数检查用户输入的数据是否合法。具体结构如下：
-
         1. 输入检查参数结构：
 
             ```c
@@ -164,7 +161,6 @@
             ```
 
     2. 寻找方案前的一些准备：
-
         1. $goal$​ 的取值范围中存在一些特殊分数，可提前过滤：
 
             ```c
@@ -218,13 +214,10 @@
             ```
 
     3. 寻找第一个符合条件的方案组合：
-
-        1. 基本思路：使用三层循环遍历 $perfect$，$good$，$max\_combo$，找出第一个满足式(9)与条件(10)的参数组合。
-
+        1. 基本思路：使用双层层循环遍历 $perfect$，$good$，再反代回式(9)，解出对应的 $max\_combo$，验证是否满足条件(10)，直到找到第一个符合条件的参数组合为止。
             - 由于 $perfect$ 数和 $max\_combo$ 数较大的情况更符合直觉，所以 $perfect$ 和 $max\_combo$ 以其最大值作为起点，$good$ 以最小值作为起点；
 
         2. 第一层循环：寻找 $perfect$。
-
             - 若当前 $perfect$ 值对应的最大分数（即除 $perfect$ 以外都是 $good$）已经小于 $goal$，说明往后所有方案组合都不可能达到 $goal$，没有必要再找下去，标志着第一个方案已经找完。
 
             若：
@@ -262,7 +255,6 @@
             ```
 
         3. 第二层循环：寻找 $good$，此时需要注意两点：
-
             1. 若当前 $perfect$ 和 $good$ 值对应的最大分数（即所有 $perfect$ 和 $good$ 判定一次性全部连击无断连）已经小于 $goal$，说明对于当前的 $perfect$ 和 $good$ 值，往后所有 $max\_combo$ 值都不可能达到 $goal$，此时需要换下一个 $good$ 值；
 
             2. 若当前 $perfect$ 和 $good$ 值对应的最小分数（即 $max\_combo = 1$）已经大于 $goal$，说明对于当前的 $perfect$ 值，往后所有方案组合都不可能达到 $goal$，没有必要再找下去，此时需要换下一个$perfect$值；
@@ -301,31 +293,23 @@
                 set_good --> check_good
             ```
 
-        4. 第三层循环：寻找 $max\_combo$，若：
+        4. 第三层循环：寻找 $max\_combo$：
 
-            $min\_bad\_and\_miss \gets \lceil \frac{perfect + good}{max\_combo} \rceil - 1$
-
-            则具体逻辑如下图：
+            经过实际计算，通过此方法算出的 $max\_combo$ 误差几乎全部出现在 3 位小数，因此直接四舍五入造成的精度损失不影响最终的计算，具体逻辑如下图：
 
             ```mermaid
             graph TD
                 Start([Start])
-                init_max_combo[max_combo = perfect + good]
-                check_max_combo{max_combo > 0?}
                 check_bad_and_miss{min_bad_and_miss > real_bad_and_miss?}
                 check_score{score = goal?}
                 add_solution_list[add_solution_list]
-                set_max_combo[max_combo = max_combo - 1]
                 End([End])
 
-                Start --> init_max_combo
-                init_max_combo --> check_max_combo
-                check_max_combo -- no --> End
-                check_max_combo -- yes --> check_bad_and_miss
+                Start --> check_bad_and_miss
                 check_bad_and_miss -- yes --> End
                 check_bad_and_miss -- no --> check_score
                 check_score -- yes --> add_solution_list --> End
-                check_score -- no --> set_max_combo --> check_max_combo
+                check_score -- no --> End
             ```
 
     4. 寻找其它满足条件的方案组合
@@ -388,7 +372,7 @@
 
         相对于 $max\_combo$ 每次递减的 $117$ 来说，基础值 $9$ 很小，做完上述操作后，$max\_combo$ **有小于 $0$ 的风险**，此时需重复式$(12)$ ~ 式$(16)$，直至 $max\_combo$ 恢复至大于 $0$。
 
-    5. 将符合条件的方案组合加入至方案链表：
+    5. 将符合条件的方案组合加入至方案数组：
 
         在更新方案之前，我们需要先更新数据：
 
@@ -413,7 +397,6 @@
         其中 $min\_note = perfect + good + \lceil \frac{perfect + good}{max\_combo} \rceil - 1$
 
         这三种情况分别对应：
-
         1. $max\_combo$ 超界；
         2. $perfect$ 自减下溢，这种情况标志着**所有方案都已找完**，没有必要再找下去；
         3. 达成该方案所需最小$note$数超出上界；

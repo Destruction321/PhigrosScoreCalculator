@@ -178,7 +178,6 @@ bool get_first_good(Song* song, Loop* loop) {
         }
 
         ///< get_first_max_combo
-        loop->loop_max_combo = loop->loop_perfect + loop->loop_good;
         if (get_first_max_combo(song, loop)) {
             return true;
         }
@@ -189,31 +188,33 @@ bool get_first_good(Song* song, Loop* loop) {
 }
 
 bool get_first_max_combo(Song* song, Loop* loop) {
-    do {
-        int bad_and_miss = (
-            (loop->loop_perfect + loop->loop_good - 1) / loop->loop_max_combo
-        );
+    loop->loop_max_combo = (int)round(
+        (
+            (song->goal / factor)
+            - PERFECT_FACTOR * loop->loop_perfect
+            - GOOD_FACTOR * loop->loop_good
+        ) / MAX_COMBO_FACTOR
+    );
+    int bad_and_miss = (
+        (loop->loop_perfect + loop->loop_good - 1) / loop->loop_max_combo
+    );
 
-        if (bad_and_miss > song->note - loop->loop_perfect - loop->loop_good) {
-            break;
-        }
+    if (bad_and_miss > song->note - loop->loop_perfect - loop->loop_good) {
+        return false;
+    }
 
-        int score = calculate_score(
-            loop->loop_perfect,
-            loop->loop_good,
-            loop->loop_max_combo
-        );
+    int score = calculate_score(
+        loop->loop_perfect,
+        loop->loop_good,
+        loop->loop_max_combo
+    );
 
-        if (score != song->goal) {
-            continue;
-        }
-        
-        input_data(array, loop); ///< 找到第一个方案，加入数组
-        return true;
-
-    } while (--(loop->loop_max_combo) > 0);
-
-    return false;
+    if (score != song->goal) {
+        return false;
+    }
+    
+    input_data(array, loop); ///< 找到第一个方案，加入数组
+    return true;
 }
 
 int calculate_score(int perfect, int good, int max_combo) {
