@@ -199,7 +199,9 @@ bool get_first_max_combo(Song* song, Loop* loop) {
         (loop->loop_perfect + loop->loop_good - 1) / loop->loop_max_combo
     );
 
-    if (bad_and_miss > song->note - loop->loop_perfect - loop->loop_good) {
+    int real_bad_and_miss = song->note - loop->loop_perfect - loop->loop_good;
+
+    if (bad_and_miss > real_bad_and_miss) {
         return false;
     }
 
