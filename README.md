@@ -215,7 +215,7 @@
 
     3. 寻找第一个符合条件的方案组合：
         1. 基本思路：使用双层层循环遍历 $perfect$，$good$，再反代回式(9)，解出对应的 $max\_combo$，验证是否满足条件(10)，直到找到第一个符合条件的参数组合为止。
-            - 由于 $perfect$ 数和 $max\_combo$ 数较大的情况更符合直觉，所以 $perfect$ 和 $max\_combo$ 以其最大值作为起点，$good$ 以最小值作为起点；
+            - 由于 $perfect$ 数较大的情况更符合直觉，所以 $perfect$ 以其最大值作为起点，$good$ 以最小值作为起点；
 
         2. 第一层循环：寻找 $perfect$。
             - 若当前 $perfect$ 值对应的最大分数（即除 $perfect$ 以外都是 $good$）已经小于 $goal$，说明往后所有方案组合都不可能达到 $goal$，没有必要再找下去，标志着第一个方案已经找完。
@@ -238,7 +238,7 @@
                 check_max_score{goal - perfect_score < delta_score?}
                 check_min_score{score < goal?}
                 get_first_good[get_first_good]
-                get_solutions_list{get a solution_list?}
+                get_solutions{get a solution?}
                 set_perfect[perfect = perfect - 1]
                 End([End])
 
@@ -248,9 +248,9 @@
                 check_max_score -- no --> check_min_score
                 check_max_score -- yes --> set_perfect
                 check_min_score -- yes --> End
-                check_min_score -- no --> get_first_good --> get_solutions_list
-                get_solutions_list -- yes --> End
-                get_solutions_list -- no --> set_perfect
+                check_min_score -- no --> get_first_good --> get_solutions
+                get_solutions -- yes --> End
+                get_solutions -- no --> set_perfect
                 set_perfect --> check_perfect
             ```
 
@@ -277,7 +277,7 @@
                 check_max_score{max_score < goal?}
                 check_min_score{min_score > goal?}
                 get_first_max_combo[get_first_max_combo]
-                get_solutions_list{get a solution_list?}
+                get_solutionst{get a solution?}
                 set_good[good = good + 1]
                 End([End])
 
@@ -287,28 +287,28 @@
                 check_max_score -- no --> check_min_score
                 check_max_score -- yes --> set_good
                 check_min_score -- yes --> End
-                check_min_score -- no --> get_first_max_combo --> get_solutions_list
-                get_solutions_list -- yes --> End
-                get_solutions_list -- no --> set_good
+                check_min_score -- no --> get_first_max_combo --> get_solutions
+                get_solutions -- yes --> End
+                get_solutions -- no --> set_good
                 set_good --> check_good
             ```
 
         4. 第三层循环：寻找 $max\_combo$：
 
-            经过实际计算，通过此方法算出的 $max\_combo$ 误差几乎全部出现在 3 位小数，因此直接四舍五入造成的精度损失不影响最终的计算，具体逻辑如下图：
+            经过实际计算，通过此方法算出的 $max\_combo$ 误差几乎全部出现在 **3 位小数**，因此直接四舍五入造成的精度损失**不影响最终的计算**，具体逻辑如下图：
 
             ```mermaid
             graph TD
                 Start([Start])
                 check_bad_and_miss{min_bad_and_miss > real_bad_and_miss?}
                 check_score{score = goal?}
-                add_solution_list[add_solution_list]
+                add_solution[add_solution]
                 End([End])
 
                 Start --> check_bad_and_miss
                 check_bad_and_miss -- yes --> End
                 check_bad_and_miss -- no --> check_score
-                check_score -- yes --> add_solution_list --> End
+                check_score -- yes --> add_solution --> End
                 check_score -- no --> End
             ```
 
