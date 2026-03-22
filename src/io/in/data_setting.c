@@ -85,7 +85,7 @@ int get_min(Input input) {
 Status scanf_int(int* data, int min, int max) {
     enum {
         INT_SIZE = 8,
-        LAST = INT_SIZE - 2 ///< INT_SIZE - 2, 最后一个有效整数位
+        LAST = INT_SIZE - 2 ///< 最后一个有效整数位
     };
     char str[INT_SIZE] = { '\0' };
 
