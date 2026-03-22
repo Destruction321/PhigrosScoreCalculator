@@ -43,15 +43,15 @@ void write_file(Song* song) {
     print_dividing_line('=', LONG + ASTERISK, fp);
 
     sol_t* data = (sol_t*)array->data;
-    for (size_t i = 1; i <= array->num; ++i) {
+    for (size_t i = 0; i < array->num; ++i) {
         fprintf(
             fp, "%4zu. Perfect：%-4d, Good：%-4d, Max Combo：%-4d",
-            i, data->perfect, data->good, data->max_combo
+            i + 1, data[i].perfect, data[i].good, data[i].max_combo
         );
         if (i % 2 == 0) { ///< 文件里两个方案一行
-            fputc('\n', fp);
-        } else {
             fputc('\t', fp);
+        } else {
+            fputc('\n', fp);
         }
     }
 
@@ -91,7 +91,9 @@ FILE* create_file(Song* song, Status* status) {
             break;
         }
         ///< 没有对应目录，尝试创建文件夹
-        if (create_folder(folder_path) == 0) {
+        if (create_folder(folder_path) == 0 || errno == EEXIST) {
+            printf("已创建文件夹\"%s\"，正在创建文件...\n", folder_path);
+            printf("文件路径：%s\n", file_path);
             fp = fopen(file_path, "w");
         }
         break;
@@ -108,13 +110,16 @@ FILE* create_file(Song* song, Status* status) {
 char* get_folder_path(char* file_path, char* folder_path, Song* song) {
     ///< 获取solutions文件夹路径
     getcwd(folder_path, FILE_LENGTH);
+    char temp[FILE_LENGTH];
 
     ///< 拼接获取目标文件夹的上级路径
     snprintf(
-        folder_path, FILE_LENGTH,
+        temp, FILE_LENGTH,
         "%s%csolutions%c",
         folder_path, PATH_SEPARATOR, PATH_SEPARATOR
     );
+    strncpy(folder_path, temp, FILE_LENGTH - 1);
+    folder_path[FILE_LENGTH - 1] = '\0';
 
     ///< 获取自定义文件夹名称
     char* subfolder = set_file_path(file_path, song);
@@ -123,7 +128,9 @@ char* get_folder_path(char* file_path, char* folder_path, Song* song) {
     }
 
     ///< 拼接获取文件完整路径
-    snprintf(folder_path, FILE_LENGTH, "%s%s", folder_path, subfolder);
+    snprintf(temp, FILE_LENGTH, "%s%s", folder_path, subfolder);
+    strncpy(folder_path, temp, FILE_LENGTH - 1);
+    folder_path[FILE_LENGTH - 1] = '\0';
     return subfolder;
 }
 
@@ -151,13 +158,16 @@ char* set_file_path(char* file_path, Song* song) {
 
     ///< 获取当前工作目录，并拼接完整路径
     getcwd(file_path, FILE_LENGTH);
+    char temp[FILE_LENGTH];
     snprintf(
-        file_path, FILE_LENGTH,
+        temp, FILE_LENGTH,
         "%s%csolutions%c%s%c%dnotes,goal=%d.txt",
         file_path, PATH_SEPARATOR,
         PATH_SEPARATOR, subfolder, PATH_SEPARATOR, song->note,
         song->goal
     );
+    strncpy(file_path, temp, FILE_LENGTH - 1);
+    file_path[FILE_LENGTH - 1] = '\0';
     return subfolder;
 }
 

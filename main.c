@@ -14,8 +14,11 @@
  * @copyright Copyright (c) 2025
  */
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <stdarg.h>
 #include <setjmp.h>
+#include <errno.h>
 
 #include "print.h"
 #include "struct.h"
@@ -23,14 +26,36 @@
 #include "dynamic_array.h"
 #include "data_setting.h"
 #include "algorithm.h"
+#include "file.h"
 
 
 static jmp_buf env; ///< 错误处理跳转
 
+static void init_folder(void);
 static void program(Song* song);
 static bool main_program(Song* song);
 static void error_exit(const char* format, ...);
 
+
+/**
+ * @brief 初始化文件夹
+ */
+static void init_folder(void) {
+    if (create_folder("solutions") != 0 && errno != EEXIST) {
+        alloc_error("创建文件夹失败");
+    }
+
+    size_t path_size = strlen("solutions/default") + 1;
+    char* path = (char*)calloc(1, path_size * sizeof(char));
+    if (path == NULL) {
+        alloc_error("内存分配失败");
+    }
+    snprintf(path, path_size, "solutions%cdefault", PATH_SEPARATOR);
+    if (create_folder(path) != 0 && errno != EEXIST) {
+        alloc_error("创建文件夹失败");
+    }
+    free(path);
+}
 
 /**
  * @brief 程序的逻辑框架
@@ -99,11 +124,14 @@ static bool main_program(Song* song) {
  * @retval 非 0 异常退出
  */
 int main(void) {
+    init_folder();
+    
     ///< 错误处理，error_exit 函数跳转至此
     if (setjmp(env) != 0) {
         Free(array);
         exit(EXIT_FAILURE);
     }
+
     fputs("\033[2J\033[H", stdout); ///< 清除终端
     register_alloc_error(error_exit);
     check_alloc_error();

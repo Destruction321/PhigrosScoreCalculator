@@ -110,7 +110,7 @@ Status scanf_int(int* data, int min, int max) {
     char* endptr = NULL;
     long temp = strtol(str, &endptr, 0);
 
-    ///< 检查合法性
+    ///< 检查合法性（例如"123abc", *endptr = 'a'）
     bool invalid = ((*endptr != '\n') && (*endptr != '\0'));
     if (invalid || (temp > max) || (temp < min)) {
         return FAILURE;

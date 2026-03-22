@@ -188,12 +188,12 @@ bool get_first_good(Song* song, Loop* loop) {
 }
 
 bool get_first_max_combo(Song* song, Loop* loop) {
-    loop->loop_max_combo = (int)round(
-        (
-            (song->goal / factor)
+    loop->loop_max_combo = (
+        (int)round((
+            song->goal / factor
             - PERFECT_FACTOR * loop->loop_perfect
             - GOOD_FACTOR * loop->loop_good
-        ) / MAX_COMBO_FACTOR
+        ) / MAX_COMBO_FACTOR)
     );
     int bad_and_miss = (
         (loop->loop_perfect + loop->loop_good - 1) / loop->loop_max_combo
