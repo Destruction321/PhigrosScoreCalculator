@@ -277,7 +277,7 @@
                 check_max_score{max_score < goal?}
                 check_min_score{min_score > goal?}
                 get_first_max_combo[get_first_max_combo]
-                get_solutionst{get a solution?}
+                get_solutions{get a solution?}
                 set_good[good = good + 1]
                 End([End])
 
