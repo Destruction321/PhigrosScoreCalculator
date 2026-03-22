@@ -32,6 +32,10 @@
     #define PATH_SEPARATOR '/'
 #endif
 
+#include <stdio.h>
+#include <stdbool.h>
+
+
 typedef struct song Song;
 typedef enum status Status;
 

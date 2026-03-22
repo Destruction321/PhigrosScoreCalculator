@@ -16,6 +16,8 @@
 #define GOAL  "目标分数"
 #define SOLUTION  "目标方案"
 
+#include <stdbool.h>
+
 
 typedef struct song Song;
 typedef struct input_check Input;

@@ -9,7 +9,6 @@
  * 
  * @copyright Copyright (c) 2025
  */
-#include <stdbool.h>
 #include <math.h>
 
 #include "algorithm.h"

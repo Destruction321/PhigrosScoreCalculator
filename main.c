@@ -14,8 +14,6 @@
  * @copyright Copyright (c) 2025
  */
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
 #include <stdarg.h>
 #include <setjmp.h>
 
@@ -111,7 +109,7 @@ int main(void) {
     check_alloc_error();
     Song song = { 0 };
     program(&song);
-    clear_and_print("感谢您的使用...");
+    clear_and_print("感谢您的使用...\n");
     return 0;
 }
 

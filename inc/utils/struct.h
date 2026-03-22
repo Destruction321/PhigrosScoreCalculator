@@ -14,8 +14,6 @@
 #ifndef STRUCT_H
 #define STRUCT_H
 
-#include <stdlib.h>
-
 /**
  * @brief 数据范围
  * 

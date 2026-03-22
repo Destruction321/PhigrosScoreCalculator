@@ -13,6 +13,7 @@
 #define CHOOSING_H
 
 #include <stdlib.h>
+#include <stdbool.h>
 
 /**
  * @brief 输出方案时的各种选择

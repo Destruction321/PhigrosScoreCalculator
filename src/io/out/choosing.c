@@ -9,7 +9,7 @@
  * 
  * @copyright Copyright (c) 2025
  */
-#include <stdbool.h>
+#include <stdlib.h>
 
 #include "choosing.h"
 #include "print.h"
