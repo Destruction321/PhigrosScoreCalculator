@@ -91,8 +91,7 @@ Status scanf_int(int* data, int min, int max) {
 
     ///< 检查输入情况
     if (!fgets(str, INT_SIZE, stdin)) {
-        clear_and_print("获取输入失败");
-        exit(EXIT_FAILURE);
+        alloc_error("获取输入失败");
     }
 
     ///< 用户直接按了回车
