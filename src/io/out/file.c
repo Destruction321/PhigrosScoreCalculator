@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 #include <errno.h>
 
 #include "file.h"
@@ -110,16 +111,12 @@ FILE* create_file(Song* song, Status* status) {
 char* get_folder_path(char* file_path, char* folder_path, Song* song) {
     ///< 获取solutions文件夹路径
     getcwd(folder_path, FILE_LENGTH);
-    char temp[FILE_LENGTH];
 
     ///< 拼接获取目标文件夹的上级路径
-    snprintf(
-        temp, FILE_LENGTH,
-        "%s%csolutions%c",
+    path_cpy(
+        folder_path, "%s%csolutions%c",
         folder_path, PATH_SEPARATOR, PATH_SEPARATOR
     );
-    strncpy(folder_path, temp, FILE_LENGTH - 1);
-    folder_path[FILE_LENGTH - 1] = '\0';
 
     ///< 获取自定义文件夹名称
     char* subfolder = set_file_path(file_path, song);
@@ -128,9 +125,7 @@ char* get_folder_path(char* file_path, char* folder_path, Song* song) {
     }
 
     ///< 拼接获取文件完整路径
-    snprintf(temp, FILE_LENGTH, "%s%s", folder_path, subfolder);
-    strncpy(folder_path, temp, FILE_LENGTH - 1);
-    folder_path[FILE_LENGTH - 1] = '\0';
+    path_cpy(folder_path, "%s%s", folder_path, subfolder);
     return subfolder;
 }
 
@@ -158,16 +153,12 @@ char* set_file_path(char* file_path, Song* song) {
 
     ///< 获取当前工作目录，并拼接完整路径
     getcwd(file_path, FILE_LENGTH);
-    char temp[FILE_LENGTH];
-    snprintf(
-        temp, FILE_LENGTH,
-        "%s%csolutions%c%s%c%dnotes,goal=%d.txt",
+    path_cpy(
+        file_path, "%s%csolutions%c%s%c%dnotes,goal=%d.txt",
         file_path, PATH_SEPARATOR,
         PATH_SEPARATOR, subfolder, PATH_SEPARATOR, song->note,
         song->goal
     );
-    strncpy(file_path, temp, FILE_LENGTH - 1);
-    file_path[FILE_LENGTH - 1] = '\0';
     return subfolder;
 }
 
@@ -233,6 +224,23 @@ int replace_or_skip(char* subfolder, Song* song) {
     print_dividing_line('=', LONG, stdout);
     fputs("输入\"r\"替换，其他键跳过：", stdout);
     return getch();
+}
+
+void path_cpy(char* path, const char* fmt, ...) {
+    va_list args;
+    va_start(args, fmt);
+    int len = vsnprintf(NULL, 0, fmt, args);
+    va_end(args);
+    if (len < 0 || len >= FILE_LENGTH) {
+        alloc_error("路径长度超出限制");
+    }
+
+    va_start(args, fmt);
+    char temp[FILE_LENGTH] = { '\0' };
+    vsnprintf(temp, FILE_LENGTH, fmt, args);
+    va_end(args);
+    strncpy(path, temp, FILE_LENGTH - 1);
+    path[FILE_LENGTH - 1] = '\0';
 }
 
 void file_error(char* file_path, char* subfolder) {

@@ -130,6 +130,15 @@ bool check_file_exist(char* file_path, char* subfolder, Song* song);
 int replace_or_skip(char* subfolder, Song* song);
 
 /**
+ * @brief 路径拼接函数
+ * 
+ * @param[out] path 路径数组，长度不大于 FILE_LENGTH
+ * @param[in] fmt 格式化字符串
+ * @param[in] ... 填充内容，与 fmt 中的格式说明符对应
+ */
+void path_cpy(char* path, const char* fmt, ...);
+
+/**
  * @brief 文件创建失败处理函数
  * 
  * @param[in] file_path 文件路径
