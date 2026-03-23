@@ -34,6 +34,7 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdarg.h>
 
 
 typedef struct song Song;
