@@ -45,13 +45,18 @@ static void init_folder(void) {
         error_exit("创建文件夹solutions失败");
     }
 
-    enum { PATH_SIZE = strlen("solutions/default") + 1 };
-    char path[PATH_SIZE] = { '\0' };
+    const size_t PATH_SIZE = strlen("solutions/default") + 1;
+    char* path = (char*)calloc(1, PATH_SIZE);
+    if (path == NULL) {
+        error_exit("内存分配失败");
+    }
 
     snprintf(path, PATH_SIZE, "solutions%cdefault", PATH_SEPARATOR);
     if (create_folder(path) != 0 && errno != EEXIST) {
+        free(path);
         error_exit("创建文件夹default失败");
     }
+    free(path);
 }
 
 /**
