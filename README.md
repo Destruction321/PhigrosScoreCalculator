@@ -300,12 +300,14 @@
             ```mermaid
             graph TD
                 Start([Start])
+                get_max_combo[get_max_combo]
+                get_min_bad_and_miss[get_min_bad_and_miss]
                 check_bad_and_miss{min_bad_and_miss > real_bad_and_miss?}
                 check_score{score = goal?}
                 add_solution[add_solution]
                 End([End])
 
-                Start --> check_bad_and_miss
+                Start --> get_max_combo --> get_min_bad_and_miss --> check_bad_and_miss
                 check_bad_and_miss -- yes --> End
                 check_bad_and_miss -- no --> check_score
                 check_score -- yes --> add_solution --> End
