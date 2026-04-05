@@ -86,18 +86,15 @@ FILE* create_file(Song* song, Status* status) {
 
     ///< 写文件
     FILE* fp = fopen(file_path, "w");
-    while (fp == NULL) {
-        ///< 访问失败，但失败原因不是文件不存在
-        if (errno != ENOENT) {
-            break;
-        }
-        ///< 没有对应目录，尝试创建文件夹
-        if (create_folder(folder_path) == 0 || errno == EEXIST) {
-            printf("已创建文件夹\"%s\"，正在创建文件...\n", folder_path);
-            printf("文件路径：%s\n", file_path);
-            fp = fopen(file_path, "w");
-        }
-        break;
+    if (fp == NULL && errno != ENOENT) {
+        file_error(file_path, check_folder_path); ///< 访问失败，但失败原因不是文件不存在
+    }
+
+    ///< 没有对应目录，尝试创建文件夹
+    if (create_folder(folder_path) == 0 || errno == EEXIST) {
+        printf("已创建文件夹\"%s\"，正在创建文件...\n", folder_path);
+        printf("文件路径：%s\n", file_path);
+        fp = fopen(file_path, "w");
     }
 
     if (fp == NULL) {
