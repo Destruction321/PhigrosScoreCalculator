@@ -227,12 +227,11 @@ void path_cpy(char* path, const char* fmt, ...) {
     va_list args;
     va_start(args, fmt);
     int len = vsnprintf(NULL, 0, fmt, args);
-    va_end(args);
     if (len < 0 || len >= FILE_LENGTH) {
+        va_end(args);
         alloc_error("路径长度超出限制");
     }
 
-    va_start(args, fmt);
     char temp[FILE_LENGTH] = { '\0' };
     vsnprintf(temp, FILE_LENGTH, fmt, args);
     va_end(args);
