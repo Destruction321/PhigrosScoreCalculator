@@ -1,4 +1,6 @@
+/.claude
 /.vscode
 /others
 /solutions
-/main.exe
+/main*
+!/main.c
