@@ -1,85 +1,48 @@
 /**
- * @file datasetting.h
- * 
- * @brief 数据输入相关函数定义
- * 
+ * @file data_setting.h
+ *
+ * @brief 数据输入相关接口声明
+ *
  * @author 棍母
  * @version 11.45.14
  * @date 1919-08-10
- * 
- * @copyright Copyright (c) 2025
  */
+
 #ifndef DATASETTING_H
 #define DATASETTING_H
 
-#define NOTE " note 总数"
-#define GOAL  "目标分数"
-#define SOLUTION  "目标方案"
-
-#include <stdbool.h>
-
-
-typedef struct song Song;
-typedef struct input_check Input;
-typedef enum status Status;
+#include "struct.h"
 
 /**
- * @brief 设定 note 和 goal
- * 
+ * @brief 设定 note 总数和目标分数
+ *
  * @param[out] song 歌曲参数地址
- * @return true 输入完成；
- * @return false 直接退出
+ * @retval RESULT_OK 输入完成；goal 为 CHANGE_NOTE 时由调用者重新设置 note
+ * @retval RESULT_CANCEL 用户退出或输入流结束
+ * @retval RESULT_ERROR 输入读取失败或输入参数无效
  */
-bool set_note_and_goal(Song* song);
+Result set_note_and_goal(Song* song);
 
 /**
- * @brief 输入数据
- * 
- * @param[out] data 数据地址
- * @param[in] input 输入检查参数
- * @param[in] song 歌曲参数
- * @return true 输入完成；
- * @return false 直接退出
+ * @brief 读取并检查一个整数，必要时提示重新输入
+ *
+ * @param[out] data 接收合法整数的地址
+ * @param[in] input 输入范围与提示参数
+ * @param[in] song 歌曲参数地址，用于显示当前设定
+ * @retval RESULT_OK 输入完成
+ * @retval RESULT_CANCEL 用户退出或输入流结束
+ * @retval RESULT_ERROR 输入读取失败或输入范围无效
  */
-bool set_data(int* data, Input input, Song* song);
+Result set_data(int* data, Input input, Song* song);
 
 /**
- * @brief 初始化输入检查参数
- * 
- * @param[in] min 最小值
- * @param[in] max 最大值
- * @param[in] name 名称
- * @return Input 输入检查参数
+ * @brief 根据输入类型统一设置范围和提示名称
+ *
+ * @param[in] kind 输入类型
+ * @param[in] solution_count 可选方案数量，INPUT_SOLUTION 时须大于 0；其他类型传 0
+ * @return Input 包含范围、显示名称和类型的参数，名称指向字符串常量
+ * @note 未知类型或非正方案数量生成无效范围，由 set_data 返回 RESULT_ERROR
  */
-Input init_input(int min, int max, const char* name);
-
-/**
- * @brief 获取最小值
- * 
- * @param[in] input 输入检查参数
- * @return int （可能具有特殊用途的）最小值
- */
-int get_min(Input input);
-
-/**
- * @brief 获取用户输入并判断合法性
- * 
- * @param[out] data 输入数据的地址
- * @param[in,out] min 最小值，在输入 goal 或选择方案时，最小值有特殊用途
- * @param[in] max 最大值
- * @return Status 返回输入结果
- */
-Status scanf_int(int* data, int min, int max);
-
-/**
- * @brief 检查输入数据的合法性
- * 
- * @param[in,out] status 状态码
- * @param[in] input 输入检查参数
- * @param[in] note 输入数据为 goal 时，提供当前 note 数以判断是否需要修改
- * @return true 输入合法；
- * @return false 输入不合法
- */
-bool is_valid(Status* status, Input input, int note);
+Input init_input(InputKind kind, int solution_count);
 
 #endif ///< DATASETTING_H

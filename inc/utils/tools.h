@@ -6,22 +6,21 @@
  * @author 棍母
  * @version 11.45.14
  * @date 1919-08-10
- * 
- * @copyright Copyright (c) 2025
  */
+
 #ifndef TOOLS_H
 #define TOOLS_H
 
 #include <stdio.h>
-#include <stdarg.h>
 
 /**
  * @brief 分割线长度
+ *
  */
 enum dividing_line_length {
-    LONG = 71,     ///< 无效的目标分数，请输入一个 1 到 1000000 之间的整数，按"Enter"结束输入：
-    MEDIUM = 47,   ///< 按"Enter"开始新一轮查找，输入其他任意字符退出：
-    SHORT = 39,    ///< 按"Enter"以开始，输入其他任意字符退出：
+    LONG = 71,     ///< 无效的目标分数，请输入一个 1 到 1000000 之间的整数，按"Enter"结束输入
+    MEDIUM = 47,   ///< 按"Enter"开始新一轮查找，输入其他任意字符退出
+    SHORT = 39,    ///< 按"Enter"以开始，输入其他任意字符退出
     ASTERISK = 33, ///< *********************************
 };
 
@@ -37,9 +36,9 @@ void clear_and_print(const char* format, ...);
 /**
  * @brief 打印分割线。
  *
- * @param[in,out] line_type 分割线类型
+ * @param[in] line_type 分割线类型
  * @param[in] length 分割线长度
- * @param[in] stream 输出流
+ * @param[in,out] stream 接收分割线的输出流
  */
 void print_dividing_line(char line_type, int length, FILE* stream);
 
@@ -51,7 +50,7 @@ void clear_buffer(void);
 /**
  * @brief 获取一个字符。
  * 
- * @return int 读取到的字符
+ * @return int 读取到的字符；输入流结束或读取失败时返回 EOF
  */
 int getch(void);
 

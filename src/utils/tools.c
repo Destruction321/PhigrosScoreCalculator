@@ -6,15 +6,14 @@
  * @author 棍母
  * @version 11.45.14
  * @date 1919-08-10
- * 
- * @copyright Copyright (c) 2025
  */
+
+#include "tools.h"
+
 #include <stdio.h>
-#include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
 
-#include "tools.h"
 
 
 void clear_and_print(const char* format, ...) {

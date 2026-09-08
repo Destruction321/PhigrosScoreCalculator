@@ -6,13 +6,11 @@
  * @author 棍母
  * @version 11.45.14
  * @date 1919-08-10
- * 
- * @copyright Copyright (c) 2025
  */
-#include <stdio.h>
-#include <stdlib.h>
 
 #include "print.h"
+
+#include <stdio.h>
 #include "struct.h"
 #include "tools.h"
 
@@ -34,34 +32,39 @@ bool exit_confirmation(void) {
 }
 
 void print_tip(Input input, Song* song) {
-    if (input.compare_name_with_solution != 0) {
+    if (input.kind != INPUT_SOLUTION) {
         printf("当前设定的 note 总数和目标分数分别为：%d，%d\n", song->note, song->goal);
     }
     ///< 打印分割线
-    if (input.compare_name_with_goal == 0 || input.compare_name_with_solution == 0) {
+    if (input.kind == INPUT_GOAL || input.kind == INPUT_SOLUTION) {
         print_dividing_line('=', LONG, stdout);
     } else {
         print_dividing_line('=', MEDIUM, stdout);
     }
     ///< 打印提示信息
     printf("请输入歌曲%s（%d 到 %d 之间的整数", input.name, input.min, input.max);
-    if (input.compare_name_with_goal == 0) {
+    if (input.kind == INPUT_GOAL) {
         fputs("，输入 -1 修改 note 数", stdout);
-    } else if (input.compare_name_with_solution == 0) {
+    } else if (input.kind == INPUT_SOLUTION) {
         fputs("，输入 0 将所有方案写入文件", stdout);
     }
     fputs("）：", stdout);
 }
 
 bool direct_exit(Input input, Song* song) {
-    clear(input.compare_name_with_solution, EXIT);
-    if (input.compare_name_with_solution != 0) {
+    (void)song;
+    clear(input.kind, EXIT);
+    if (input.kind != INPUT_SOLUTION) {
         print_dividing_line('=', SHORT, stdout);
     }
     fputs("您是否要退出？\n", stdout);
     print_dividing_line('=', SHORT, stdout);
     fputs("按\"Enter\"以退出，输入其他任意字符继续：", stdout);
-    if (getch() != '\n') {
+    int choice = getch();
+    if (choice == EOF) {
+        return true;
+    }
+    if (choice != '\n') {
         return false;
     }
     printf("\033[3F确定要退出吗？\n\033[B\033[%dG", SHORT); ///< 替换"您是否要退出？"并返回输入位置
@@ -72,13 +75,13 @@ bool direct_exit(Input input, Song* song) {
 }
 
 void error_message(Input input, int note) {
-    clear(input.compare_name_with_solution, ERROR_CHOICE);
+    clear(input.kind, ERROR_CHOICE);
     print_dividing_line('=', LONG, stdout);
     printf(
         "无效的%s，请输入一个 %d 到 %d 之间的整数，按\"Enter\"结束输入",
         input.name, input.min, input.max
     );
-    if (input.compare_name_with_goal != 0) {
+    if (input.kind != INPUT_GOAL) {
         fputs("：", stdout);
     } else {
         printf("；\n输入 -1 修改 note 数，当前 note 数：%d；\n", note);
@@ -87,9 +90,9 @@ void error_message(Input input, int note) {
     }
 }
 
-void clear(int compare_name_with_solution, int times) {
-    if (compare_name_with_solution == 0) {
-        for (size_t i = 1; i <= times; ++i) {
+void clear(InputKind kind, int times) {
+    if (kind == INPUT_SOLUTION) {
+        for (int i = 1; i <= times; ++i) {
             fputs("\033[F\033[2K", stdout);
         }
     } else {

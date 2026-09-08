@@ -1,148 +1,27 @@
 /**
  * @file algorithm.h
- * 
- * @brief 算法相关函数定义
- * 
+ *
+ * @brief 算法相关接口声明
+ *
  * @author 棍母
  * @version 11.45.14
  * @date 1919-08-10
- * 
- * @copyright Copyright (c) 2025
  */
+
 #ifndef ALGORITHM_H
 #define ALGORITHM_H
 
-#include <stdbool.h>
+#include "struct.h"
 
 /**
- * @brief 公式参数
- * 
- * 参数来源见README.md
+ * @brief 查找并展示指定目标分数的方案
+ *
+ * @param[in] song 歌曲参数地址
+ * @retval RESULT_OK 正常完成，包括未找到方案
+ * @retval RESULT_CANCEL 用户退出或输入流结束
+ * @retval RESULT_ERROR 内存分配或输入输出失败
+ * @note 数组在内部创建并统一释放，不向调用者转移所有权
  */
-enum formula_factor {
-    PERFECT_FACTOR = 180,
-    GOOD_FACTOR = 117,
-    MAX_COMBO_FACTOR = 20,
-    BASIC_ADDED = 9,
-};
-
-typedef struct song Song;
-typedef struct auxiliary_arguments Args; ///< 算法辅助参数结构
-typedef struct loop Loop; ///< 循环参数结构
-
-
-/**
- * @brief 寻找方案
- * 
- * @param[in] song 歌曲参数
- * @return true 未找到方案或用户走完了流程；
- * @return false 用户不进行方案选择
- */
-bool seek_solution(Song* song);
-
-/**
- * @brief 算法
- * 
- * @param[in] song 歌曲参数
- * @return true 未找到方案或用户走完了流程；
- * @return false 用户不进行方案选择
- */
-bool algorithm(Song* song);
-
-/**
- * @brief 初始化辅助参数
- * 
- * @param[in] song 歌曲参数
- * @param[in,out] args 辅助参数
- */
-void init_args(Song* song, Args* args);
-
-/**
- * @brief 寻找所有方案
- * 
- * @param[in] song 歌曲参数
- * @param[in] args 辅助参数
- * @return true 找到至少一个方案；
- * @return false 未找到方案或用户不进行方案选择
- */
-bool get_solutions(Song* song, Args args);
-
-/**
- * @brief 寻找第一个方案
- * 
- * @param[in] song 歌曲参数
- * @param[in] args 辅助参数
- * @param[in,out] loop 循环参数，计算方案数据
- * @return true 找到方案；
- * @return false 未找到方案
- */
-bool get_first_solution(Song* song, Args args, Loop* loop);
-
-/**
- * @brief 寻找第一个方案的 perfect 值
- * 
- * @param[in] song 歌曲参数
- * @param[in] args 辅助参数
- * @param[in,out] loop 循环参数，计算方案数据
- * @return true 找到方案；
- * @return false 未找到方案
- */
-bool get_first_perfect(Song* song, Args args, Loop* loop);
-
-/**
- * @brief 寻找第一个方案的 good 值
- * 
- * @param[in] song 歌曲参数
- * @param[in,out] loop 循环参数，计算方案数据
- * @return true 找到方案；
- * @return false 未找到方案
- */
-bool get_first_good(Song* song, Loop* loop);
-
-/**
- * @brief 寻找第一个方案的 max_combo 值
- * 
- * @param[in] song 歌曲参数
- * @param[in,out] loop 循环参数，计算方案数据
- * @return true 找到方案；
- * @return false 未找到方案
- */
-bool get_first_max_combo(Song* song, Loop* loop);
-
-/**
- * @brief 计算分数
- * 
- * @param[in] perfect
- * @param[in] good
- * @param[in] max_combo
- * @return int 当前分数
- */
-int calculate_score(int perfect, int good, int max_combo);
-
-/**
- * @brief 寻找其他方案，原理见 README.md
- * 
- * @param[in] note note 总数
- * @param[in,out] loop 循环参数，计算方案数据
- */
-void get_other_solutions(int note, Loop loop);
-
-/**
- * @brief 更新数据
- * 
- * @param[in,out] loop 方案数据
- * @param[in,out] last_good 上一方案的 good 值
- * @return int 上一方案的 good 值
- */
-int update_data(Loop* loop, int last_good);
-
-/**
- * @brief 检查数据合理性
- * 
- * @param[in,out] loop 方案数据
- * @return true 数据合理；
- * @return false 数据不合理
- */
-bool data_is_valid(Loop loop, int note);
+Result seek_solution(Song* song);
 
 #endif ///< ALGORITHM_H

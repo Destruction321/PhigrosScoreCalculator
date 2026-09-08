@@ -1,158 +1,108 @@
 /**
  * @file main.c
- * 
+ *
  * @brief Phigros算分器，助力你打出114514分
- * 
- * 关于算法的说明，请参阅README.md
- * 本程序纯属娱乐，闲得没事就改改
- * 祝你在Phigros中取得好成绩（雾
- * 
+ *
+ * 本程序纯属娱乐，闲得没事就改改。算法说明见 MORE_DETAILS.md。
+ *
  * @author 棍母
  * @version 11.45.14
  * @date 1919-08-10
- * 
- * @copyright Copyright (c) 2025
  */
+
 #include <stdio.h>
+#include <stdbool.h>
 #include <stdlib.h>
-#include <string.h>
-#include <stdarg.h>
-#include <setjmp.h>
-#include <errno.h>
 
 #include "print.h"
 #include "struct.h"
 #include "tools.h"
-#include "dynamic_array.h"
 #include "data_setting.h"
 #include "algorithm.h"
-#include "file.h"
-
-
-static jmp_buf env; ///< 错误处理跳转
-
-static void init_folder(void);
-static void program(Song* song);
-static bool main_program(Song* song);
-static void error_exit(const char* format, ...);
-
 
 /**
- * @brief 初始化文件夹
+ * @brief 执行一轮输入、计算与退出确认
+ *
+ * @param[out] song 本轮歌曲参数地址
+ * @retval RESULT_OK 用户选择继续查找
+ * @retval RESULT_CANCEL 用户退出或输入流结束
+ * @retval RESULT_ERROR 本轮操作失败
  */
-static void init_folder(void) {
-    if (create_folder("solutions") != 0 && errno != EEXIST) {
-        error_exit("创建文件夹solutions失败");
-    }
-
-    const size_t PATH_SIZE = strlen("solutions/default") + 1;
-    char* path = (char*)calloc(1, PATH_SIZE);
-    if (path == NULL) {
-        error_exit("内存分配失败");
-    }
-
-    snprintf(path, PATH_SIZE, "solutions%cdefault", PATH_SEPARATOR);
-    if (create_folder(path) != 0 && errno != EEXIST) {
-        free(path);
-        error_exit("创建文件夹default失败");
-    }
-    free(path);
-}
-
-/**
- * @brief 程序的逻辑框架
- * 
- * @param[out] song 歌曲参数地址
- */
-static void program(Song* song) {
-    bool code = true; ///< 退出确认，true 表示未询问，false 表示已询问
-    while (true) {
-        if (code) {
-            fputs("Phigros算分器，助力你打出114514分\n", stdout);
-        }
-
-        ///< 进入主要逻辑
-        if (start_confirmation() == '\n') {
-            if (main_program(song)) {
-                continue;
-            }
-            break;
-        }
-
-        ///< 退出确认
-        if (code) {
-            clear_and_print("确定要退出吗？\n");
-            code = false;
-            continue;
-        }
-        break;
-    }
-}
-
-/**
- * @brief 确认进入程序后的逻辑框架
- * 
- * @param[out] song 歌曲参数地址
- * @return true 开启下一轮；
- * @return false 退出
- */
-static bool main_program(Song* song) {
+static Result main_program(Song* song) {
+    Result result;
     do {
-        *song = (Song){ 0 };
-        if (!set_note_and_goal(song)) {
-            return false;
+        *song = (Song){0};
+        result = set_note_and_goal(song);
+        if (result != RESULT_OK) {
+            return result;
         }
     } while (song->goal == CHANGE_NOTE);
 
-    if (!seek_solution(song)) {
-        return false;
+    result = seek_solution(song);
+    if (result != RESULT_OK) {
+        return result;
     }
 
     if (!exit_confirmation()) {
-        return true;
+        return RESULT_OK;
     }
 
     clear_and_print("确定要退出吗？\n");
-    if (!exit_confirmation()) {
-        return true;
-    }
-    return false;
+    return exit_confirmation() ? RESULT_CANCEL : RESULT_OK;
 }
 
 /**
- * @brief 主程序
- * 
- * @return int 程序退出
- * @retval 非 0 异常退出
+ * @brief 程序的交互主循环
+ *
+ * @param[out] song 存放每轮输入的歌曲参数
+ * @retval RESULT_CANCEL 用户退出或输入流结束
+ * @retval RESULT_ERROR 内存分配或输入输出失败
+ */
+static Result program(Song* song) {
+    bool confirmed = false;
+    for (;;) {
+        if (!confirmed) {
+            fputs("Phigros算分器，助力你打出114514分\n", stdout);
+        }
+
+        int choice = start_confirmation();
+        if (choice == EOF) {
+            return ferror(stdin) ? RESULT_ERROR : RESULT_CANCEL;
+        }
+
+        if (choice == '\n') {
+            Result result = main_program(song);
+            if (result != RESULT_OK) {
+                return result;
+            }
+            confirmed = false;
+            continue;
+        }
+
+        if (confirmed) {
+            return RESULT_CANCEL;
+        }
+        
+        clear_and_print("确定要退出吗？\n");
+        confirmed = true;
+    }
+}
+
+/**
+ * @brief 程序入口
+ *
+ * @return int 程序退出状态
+ * @retval EXIT_SUCCESS 正常退出
+ * @retval EXIT_FAILURE 内存分配或输入输出失败
  */
 int main(void) {
-    ///< 错误处理，error_exit 函数跳转至此
-    if (setjmp(env) != 0) {
-        Free(array);
-        exit(EXIT_FAILURE);
-    }
-    fputs("\033[2J\033[H", stdout); ///< 清除终端
-    register_alloc_error(error_exit);
-    check_alloc_error();
-    init_folder();
-    Song song = { 0 };
-    program(&song);
-    clear_and_print("感谢您的使用...\n");
-    return 0;
-}
-
-/**
- * @brief 错误退出处理函数
- * 
- * @param[in] error 错误信息格式字符串
- * @param[in] ... 可变参数列表
- */
-static void error_exit(const char* error, ...) {
-    ///< 清屏并输出错误信息 error
     fputs("\033[2J\033[H", stdout);
-    va_list args;
-    va_start(args, error);
-    vprintf(error, args);
-    va_end(args);
-    longjmp(env, 1); ///< 跳转至 main 函数进行错误处理
+    Song song = {0};
+    Result result = program(&song);
+    if (result == RESULT_ERROR || ferror(stdin)) {
+        fputs("操作失败（内存分配或输入输出错误），程序已结束。\n", stderr);
+        return EXIT_FAILURE;
+    }
+    clear_and_print("感谢您的使用...\n");
+    return EXIT_SUCCESS;
 }
