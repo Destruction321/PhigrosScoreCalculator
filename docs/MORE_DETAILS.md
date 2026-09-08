@@ -148,16 +148,16 @@
 
       当前使用的数据结构及其职责如下：
 
-      | 类型     | 定义位置                    | 用途                             |
-      | -------- | --------------------------- | -------------------------------- |
-      | `Song`   | `inc/utils/struct.h`        | 输入的 note 总数和目标分数       |
-      | `Input`  | `inc/utils/struct.h`        | 输入范围、提示名称与输入类型     |
-      | `InputKind` | `inc/utils/struct.h`     | 区分音符总数、目标分数与方案编号 |
-      | `sol_t`  | `inc/utils/struct.h`        | 对外展示、保存的方案组合         |
-      | `Result` | `inc/utils/struct.h`        | 区分完成、退出和执行失败         |
-      | `Args`   | `src/core/algorithm.c`      | 单个判定分值等算法辅助参数       |
-      | `Loop`   | `src/core/algorithm.c`      | 查找过程中的当前组合             |
-      | `Array`  | `inc/utils/dynamic_array.h` | 动态存放 `sol_t` 元素            |
+      | 类型        | 定义位置                    | 用途                             |
+      | ----------- | --------------------------- | -------------------------------- |
+      | `Song`      | `inc/utils/struct.h`        | 输入的 note 总数和目标分数       |
+      | `Input`     | `inc/utils/struct.h`        | 输入范围、提示名称与输入类型     |
+      | `InputKind` | `inc/utils/struct.h`        | 区分音符总数、目标分数与方案编号 |
+      | `sol_t`     | `inc/utils/struct.h`        | 对外展示、保存的方案组合         |
+      | `Result`    | `inc/utils/struct.h`        | 区分完成、退出和执行失败         |
+      | `Args`      | `src/core/algorithm.c`      | 单个判定分值等算法辅助参数       |
+      | `Loop`      | `src/core/algorithm.c`      | 查找过程中的当前组合             |
+      | `Array`     | `inc/utils/dynamic_array.h` | 动态存放 `sol_t` 元素            |
 
       例如，对外保存的方案使用以下结构：
 
