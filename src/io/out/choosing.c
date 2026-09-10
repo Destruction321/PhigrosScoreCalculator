@@ -115,7 +115,6 @@ static size_t print_solutions(size_t idx, const Array* array) {
         "%zu. Perfect：%d, Good：%d, Max Combo：%d\n",
         ++idx, data->perfect, data->good, data->max_combo
     );
-
     return idx;
 }
 

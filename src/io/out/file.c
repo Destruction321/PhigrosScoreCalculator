@@ -53,13 +53,14 @@ static bool create_folder(const char* path) {
  */
 static bool create_folders(char* path) {
     for (char* cursor = path; *cursor; ++cursor) {
-        if (*cursor == PATH_SEPARATOR) {
-            *cursor = '\0';
-            bool ok = create_folder(path);
-            *cursor = PATH_SEPARATOR;
-            if (!ok) {
-                return false;
-            }
+        if (*cursor != PATH_SEPARATOR) {
+            continue;
+        }
+        *cursor = '\0';
+        bool ok = create_folder(path);
+        *cursor = PATH_SEPARATOR;
+        if (!ok) {
+            return false;
         }
     }
     return create_folder(path);

@@ -36,26 +36,32 @@ Result set_data(int* data, Input input, Song* song) {
     if (input.min > input.max) {
         return RESULT_ERROR;
     }
+    
     bool show_tip = true; ///< 错误提示后保留当前界面，避免立即清除提示
     for (;;) {
         if (show_tip) {
             clear(input.kind, NOT_EXIT);
             print_tip(input, song);
         }
+
         show_tip = true;
         Status status = scanf_int(data, get_min(input), input.max);
         switch (status) {
         case SUCCESS:
             return RESULT_OK;
+
         case INPUT_END:
             return RESULT_CANCEL;
+
         case INPUT_ERROR:
             return RESULT_ERROR;
+
         case ENTER:
             if (direct_exit(input, song)) {
                 return RESULT_CANCEL;
             }
             break;
+
         default:
             error_message(input, song->note);
             show_tip = false;
@@ -71,17 +77,20 @@ Input init_input(InputKind kind, int solution_count) {
             .min = MIN_NOTE, .max = MAX_NOTE,
             .name = " note 总数", .kind = kind,
         };
+
     case INPUT_GOAL:
         return (Input){
             .min = MIN_SCORE, .max = MAX_SCORE,
             .name = "目标分数", .kind = kind,
         };
+
     case INPUT_SOLUTION:
         return (Input){
             .min = 1, .max = solution_count,
             .name = "目标方案", .kind = kind,
         };
     }
+
     ///< 未知枚举值使用无效范围，交由 set_data 报告错误
     return (Input){ .min = 1, .max = 0, .name = "未知输入", .kind = kind };
 }
@@ -96,8 +105,10 @@ static int get_min(Input input) {
     switch (input.kind) {
     case INPUT_GOAL:
         return CHANGE_NOTE;
+
     case INPUT_SOLUTION:
         return TO_FILE;
+
     default:
         return input.min;
     }

@@ -15,7 +15,6 @@
 #include <string.h>
 
 
-
 void clear_and_print(const char* format, ...) {
     fputs("\033[2J\033[H", stdout);
     va_list args;

@@ -57,8 +57,7 @@ bool array_push(Array* array, const void* data) {
             return false;
         }
     }
-    memcpy((char*)array->data + array->num * array->data_size,
-           data, array->data_size);
+    memcpy((char*)array->data + array->num * array->data_size, data, array->data_size);
     ++array->num;
     return true;
 }

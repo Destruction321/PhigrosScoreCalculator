@@ -15,7 +15,6 @@
 
 /**
  * @brief 分割线长度
- *
  */
 enum dividing_line_length {
     LONG = 71,     ///< 无效的目标分数，请输入一个 1 到 1000000 之间的整数，按"Enter"结束输入

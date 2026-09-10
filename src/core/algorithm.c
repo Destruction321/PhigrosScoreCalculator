@@ -172,8 +172,9 @@ static Result get_solutions(Song* song, Args args) {
         goto cleanup;
     }
 
-    if (!append_solution(&array, loop) ||
-        !get_other_solutions(song->note, loop, &array)) {
+    if (!append_solution(&array, loop)
+        || !get_other_solutions(song->note, loop, &array)
+    ) {
         goto cleanup;
     }
     result = choose(song, &array);
@@ -215,7 +216,6 @@ static bool get_first_solution(Song* song, Args args, Loop* loop) {
         ? (song->note - 1)
         : (int)(song->goal / args.perfect_score)
     );
-    
     return get_first_perfect(song, args, loop);
 }
 
@@ -273,7 +273,6 @@ static bool get_first_good(Song* song, Loop* loop) {
             loop->loop_good,
             loop->loop_perfect + loop->loop_good
         );
-
         if (score < song->goal) {
             continue;
         }
@@ -288,9 +287,7 @@ static bool get_first_good(Song* song, Loop* loop) {
         if (get_first_max_combo(song, loop)) {
             return true;
         }
-
     } while (++(loop->loop_good) <= song->note - loop->loop_perfect);
-
     return false;
 }
 
@@ -319,7 +316,6 @@ static bool get_first_max_combo(Song* song, Loop* loop) {
     );
 
     int real_bad_and_miss = song->note - loop->loop_perfect - loop->loop_good;
-
     if (bad_and_miss > real_bad_and_miss) {
         return false;
     }
@@ -333,7 +329,6 @@ static bool get_first_max_combo(Song* song, Loop* loop) {
     if (score != song->goal) {
         return false;
     }
-    
     return true;
 }
 
@@ -400,11 +395,8 @@ static int update_data(Loop* loop, int last_good) {
             last_good += MAX_COMBO_FACTOR;
             loop->loop_max_combo -= GOOD_FACTOR;
         }
-
         loop->loop_good = last_good;
-
     } while (loop->loop_max_combo <= 0);
-
     return last_good;
 }
 
