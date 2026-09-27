@@ -43,9 +43,17 @@ gcc -std=c17 -Iinc/core -Iinc/io/in -Iinc/io/out -Iinc/utils main.c src/core/*.c
 .\PhigrosScoreCalculator.exe
 ```
 
-如果中文显示乱码，可以先执行 `chcp 65001`，再运行程序。
+如果中文显示乱码，可以先执行以下命令：
 
-## 想看看怎么算的
+```powershell
+[Console]::InputEncoding = [System.Text.UTF8Encoding]::new()
+[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new()
+chcp 65001
+```
+
+再运行程序。
+
+## 想看看怎么算的？
 
 代码里的核心计分关系可以写成：
 
